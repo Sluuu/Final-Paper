@@ -9,36 +9,22 @@
 
 #### Workspace setup ####
 library(tidyverse)
+library(readr)
+library(dplyr)
 
 #### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+raw_data_month <- read_csv("data/raw_data/raw_data_month.csv")
+raw_data_cause <- read_csv("data/raw_data/raw_data_cause.csv")
+raw_data_demographics <- read_csv("data/raw_data/raw_data_demographics.csv")
+test_data <- read_csv("data/raw_data/raw_data_test.csv")
 
 cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
-  mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
-  ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
-  mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
-  tidyr::drop_na()
+  test_data[c("Country Name", "Country Code", "Indicator Name", "Indicator Code",  "2019", "2020")]
+
+filtered_data <- cleaned_data %>%
+  filter(`Indicator Code` %in% c("NY.GDP.PCAP.PP.KD", "SL.UEM.TOTL.NE.ZS", "NY.GDP.DEFL.KD.ZG", "NY.GDP.MKTP.KD.ZG", "NE.TRD.GNFS.ZS", "SL.TLF.CACT.NE.ZS"))
+
+
 
 #### Save data ####
 write_csv(cleaned_data, "outputs/data/analysis_data.csv")
