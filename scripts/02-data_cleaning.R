@@ -1,30 +1,36 @@
 #### Preamble ####
 # Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Author: Sean Liu
+# Date: 2 April 2024
+# Contact: yuhsiang.liu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+
 
 #### Workspace setup ####
 library(tidyverse)
 library(readr)
 library(dplyr)
+library(arrow)
 
 #### Clean data ####
-raw_data_month <- read_csv("data/raw_data/raw_data_month.csv")
-raw_data_cause <- read_csv("data/raw_data/raw_data_cause.csv")
-raw_data_demographics <- read_csv("data/raw_data/raw_data_demographics.csv")
-test_data <- read_csv("data/raw_data/raw_data_test.csv")
+raw_data <- read_csv("data/raw_data/raw_data.csv")
 
-cleaned_data <-
-  test_data[c("Country Name", "Country Code", "Indicator Name", "Indicator Code",  "2019", "2020")]
+wb_data <-
+  raw_data |>
+  rename(
+    inflation = FP.CPI.TOTL.ZG,
+    gdp_growth = NY.GDP.MKTP.KD.ZG,
+    population = SP.POP.TOTL,
+    unem_rate = SL.UEM.TOTL.NE.ZS,
+    lf_par_rate = SL.TLF.CACT.NE.ZS,
+    trade_per = NE.TRD.GNFS.ZS
+  ) |>
+  select(country, year, inflation, gdp_growth, population, unem_rate, lf_par_rate, trade_per) |>
+  filter(year %in% c(2020, 2008, 2009))
 
-filtered_data <- cleaned_data %>%
-  filter(`Indicator Code` %in% c("NY.GDP.PCAP.PP.KD", "SL.UEM.TOTL.NE.ZS", "NY.GDP.DEFL.KD.ZG", "NY.GDP.MKTP.KD.ZG", "NE.TRD.GNFS.ZS", "SL.TLF.CACT.NE.ZS"))
+data_na <- wb_data |> drop_na()
 
 
 
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+write_parquet(data_na, "data/analysis_data/data_na.parquet")
