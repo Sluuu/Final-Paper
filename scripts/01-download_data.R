@@ -17,9 +17,6 @@ library(WDI)
 
 #### Download data ####
 
-download.file(url = "https://databank.worldbank.org/data/download/WDI_CSV.zip", 
-              destfile = "data/raw_data/raw_data_testing.csv")
-
 WDIsearch("gdp growth")
 WDIsearch("inflation")
 WDIsearch("population, total")
