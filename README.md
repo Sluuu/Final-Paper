@@ -1,8 +1,8 @@
-# Evidence of different crisis effect on the economies 
+# How crisis affect the low-income and high-income economies differently 
 
 ## Overview
 
-This repo provides users to reproduce the project: *Evidence of different crisis effect on the economies*.
+This repo provides users to reproduce the project: *How crisis affect the low-income and high-income economies differently*.
 
 To use this folder, click the green "Code" button", then "Download ZIP". Move the downloaded folder to where you want to work on your own computer, and then modify it to suit.
 
@@ -11,7 +11,7 @@ To use this folder, click the green "Code" button", then "Download ZIP". Move th
 
 The repo is structured as:
 
--   `data/raw_data` contains the raw data as obtained from The World Bank.
+-   `data/raw_data` contains the raw data as obtained from The World Development Indicators and Other World Bank Data.
 -   `data/analysis_data` contains the cleaned dataset that was constructed.
 -   `other` contains relevant literature, details about LLM. 
 -   `paper` contains the files used to generate the paper, including the Quarto document and reference bibliography file, as well as the PDF of the paper. 
