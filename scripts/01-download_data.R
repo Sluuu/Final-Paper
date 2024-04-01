@@ -23,11 +23,11 @@ WDIsearch("population, total")
 WDIsearch("Unemployment, total")
 WDIsearch("Labor force participation rate, total")
 WDIsearch("Trade (% of GDP)")
+WDIsearch("gdp per capita")
 
-world_bank_data <-
-  WDI(
+world_bank_data <-WDI(
     indicator =
-      c("FP.CPI.TOTL.ZG", "NY.GDP.MKTP.KD.ZG", "SP.POP.TOTL","SL.UEM.TOTL.NE.ZS", "SL.TLF.CACT.NE.ZS", "NE.TRD.GNFS.ZS")
+      c("FP.CPI.TOTL.ZG", "NY.GDP.MKTP.KD.ZG", "SP.POP.TOTL","SL.UEM.TOTL.NE.ZS", "SL.TLF.CACT.NE.ZS", "NE.TRD.GNFS.ZS", "NY.GDP.PCAP.CD")
   )
 
 
