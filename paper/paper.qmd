@@ -1,15 +1,15 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "How crisis affect the low-income and high-income economies differently"
+subtitle: "Examples from 2008-09 financial crisis and 2020 Covid-19"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Sean Liu 
+thanks: "Code and data are available at: https://github.com/Sluuu/Final-Paper.git"
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 format: pdf
 number-sections: true
+toc: true
 bibliography: references.bib
 ---
 
@@ -19,64 +19,75 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
-library(palmerpenguins)
+library(readr)
+library(dplyr)
+library(arrow)
+library(dataverse)
+library(WDI)
+
 ```
 
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
 
-The remainder of this paper is structured as follows. @sec-data....
-
-
-
-# Data {#sec-data}
-
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
-#| echo: false
-
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
-
-Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
-
-```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
 #| echo: false
 #| warning: false
 #| message: false
 
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
-
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
+#load data
+data_na<- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 ```
 
-Talk way more about it. 
+## Defining Low-income economies and High-income economies
+
+According to The World Bank (@WDIincome), as of July 2019, using the Gross National Income (GNI) per capita by using the World Bank Atlas method. The Atlas method smooths exchange rate fluctuations using a three-year moving average. The low-income economies are defined as \$1,025 or less, lower middle-income economies are those with between \$1,026 and \$3,995. The upper middle-income economies are those between \$3,996 and \$12,375. Lastly, the high-income economies are those with a GNI per capita \$12,376 or more.
+
+For simplicity, I will group the low-income economies and the lower middle-income economies together as low-income economies. Also, the upper middle-income economies and high-income economies will be grouped as high-income economies. Therefore, a country that has a GNI per capita less than or equal to \$3995 will be categorized as low-income country. A country that has a GNI per capita larger than \$3995 will be categorized as high-income country.
+
+\newpage
+
+# Data
+
+The data is obtained from the World Development Indicators and Other World Bank Data, WDI,  @WDI. The raw data set includes, 17024 observations and 11 variables. As the raw data-set recorded some variables that 
+
+- country: It records the country's name.
+- year: It records the year of the data being recorded. In our cleaned data set there will only be year 2008, 2009, and 2020.
+- inflation: It records the inflation, measured by the consumer price index which reflects the annual percentage change in the cost to the average consumer of acquiring a basket of goods and services that may be fixed or changed at specified intervals, such as yearly.
+- gdp_growth: It records the annual percentage growth rate of GDP at market prices. The calculations are based on constant local currency.
+- population: It records the total population based on all residents regardless of legal status or citizenship.
+- unem_rate: It records the unemployment rate, the unemployment refers to the labours that are not working but is available to work or seeking for employment. 
+- lf_par_rate: It records the labor force participation rate, it calculated the proportion of the population who ages 15 and older that are active economically. 
+- trade_per: It records the sum of exports and imports of goods and services measured as a share of GDP.
+- gni_per_cap: It records the GNI per capita, the unit is converted to U.S. dollars using the World Bank Atlas method. GNI is the sum of value added by all resident producers plus any product taxes. It does not include the value of output plus net receipts of primary income from abroad.
+
+```{r}
+#| label: fig-data
+#| fig-cap: Relationship between GDP growth versus Inflation
+#| echo: false
+#| warning: false
+#| message: false
+
+data_na |>
+  ggplot(mapping = aes(x = gdp_growth, y = inflation)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "GDP growth", y = "Inflation")
+```
+
+
+
+Talk more about it.
+
+
 
 
 
 # Model
 
-The goal of our modelling strategy is twofold. Firstly,...
+The model is set up by using 
 
 Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
 
@@ -105,35 +116,7 @@ We can use maths by including latex between dollar signs, for instance $\theta$.
 
 # Results
 
-Our results are summarized in @tbl-modelresults.
 
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
-```
 
 
 
@@ -165,51 +148,12 @@ Weaknesses and next steps should also be included.
 
 ## Posterior predictive check
 
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
 
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
 
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
-
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
-```
 
 ## Diagnostics
 
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
 
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
 
 
 
