@@ -2,9 +2,10 @@
 
 ## Overview
 
-This repo provides users to reproduce the project: *How crisis affect the low-income and high-income economies differently*.
+This repo provides users to reproduce the project: *How crisis affect the low-income and high-income economies differently*. To use this folder, click the green "Code" button", then "Download ZIP". Move the downloaded folder to where you want to work on your own computer, and then modify it to suit.
 
-To use this folder, click the green "Code" button", then "Download ZIP". Move the downloaded folder to where you want to work on your own computer, and then modify it to suit.
+## Package Installation
+Unable to install the `arrow` package. Therefore in the data_cleaning R script, saved the data as csv file. 
 
 
 ## File Structure
