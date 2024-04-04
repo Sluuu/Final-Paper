@@ -30,8 +30,9 @@ library(WDI)
 
 # Introduction
 
+Globalization improves the connection of different countries of the world. Economically,  globalization benefits different countries in multiple ways and being able to trade goods across borders.[@globalization] However, the effects of globalization brings the whole economy on the same boat. Consequently, when various global crises occur, they have multiple and different impacts on the world economy.
 
-
+In this paper, I am interested on how global crises impact each country differently. I have chosen the top two global crisis as my study, which are the 2008, 09 global financial crisis and the 2020 COVID-19 pandemic. 
 ```{r}
 #| echo: false
 #| warning: false
@@ -39,11 +40,12 @@ library(WDI)
 
 #load data
 data_na<- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+#dd_test <- read_parquet(here::here("data/analysis_data/data_na.parquet"))
 ```
 
 ## Defining Low-income economies and High-income economies
 
-According to The World Bank (@WDIincome), as of July 2019, using the Gross National Income (GNI) per capita by using the World Bank Atlas method. The Atlas method smooths exchange rate fluctuations using a three-year moving average. The low-income economies are defined as \$1,025 or less, lower middle-income economies are those with between \$1,026 and \$3,995. The upper middle-income economies are those between \$3,996 and \$12,375. Lastly, the high-income economies are those with a GNI per capita \$12,376 or more.
+According to The World Bank [@WDIincome], as of July 2019, using the Gross National Income, GNI, per capita by using the World Bank Atlas method. The Atlas method smooths exchange rate fluctuations using a three-year moving average. The low-income economies are defined as \$1,025 or less, lower middle-income economies are those with between \$1,026 and \$3,995. The upper middle-income economies are those between \$3,996 and \$12,375. Lastly, the high-income economies are those with a GNI per capita \$12,376 or more.
 
 For simplicity, I will group the low-income economies and the lower middle-income economies together as low-income economies. Also, the upper middle-income economies and high-income economies will be grouped as high-income economies. Therefore, a country that has a GNI per capita less than or equal to \$3995 will be categorized as low-income country. A country that has a GNI per capita larger than \$3995 will be categorized as high-income country.
 
@@ -53,15 +55,16 @@ For simplicity, I will group the low-income economies and the lower middle-incom
 
 The data is obtained from the World Development Indicators and Other World Bank Data, WDI,  @WDI. The raw data set includes, 17024 observations and 11 variables. As the raw data-set recorded some variables that 
 
-- country: It records the country's name.
-- year: It records the year of the data being recorded. In our cleaned data set there will only be year 2008, 2009, and 2020.
-- inflation: It records the inflation, measured by the consumer price index which reflects the annual percentage change in the cost to the average consumer of acquiring a basket of goods and services that may be fixed or changed at specified intervals, such as yearly.
-- gdp_growth: It records the annual percentage growth rate of GDP at market prices. The calculations are based on constant local currency.
-- population: It records the total population based on all residents regardless of legal status or citizenship.
-- unem_rate: It records the unemployment rate, the unemployment refers to the labours that are not working but is available to work or seeking for employment. 
-- lf_par_rate: It records the labor force participation rate, it calculated the proportion of the population who ages 15 and older that are active economically. 
-- trade_per: It records the sum of exports and imports of goods and services measured as a share of GDP.
-- gni_per_cap: It records the GNI per capita, the unit is converted to U.S. dollars using the World Bank Atlas method. GNI is the sum of value added by all resident producers plus any product taxes. It does not include the value of output plus net receipts of primary income from abroad.
+## Variables 
+- `country`: It records the country's name.
+- `year`: It records the year of the data being recorded. In our cleaned data set there will only be year 2008, 2009, and 2020.
+- `inflation`: It records the inflation, measured by the consumer price index which reflects the annual percentage change in the cost to the average consumer of acquiring a basket of goods and services that may be fixed or changed at specified intervals, such as yearly.
+- `gdp_growth`: It records the annual percentage growth rate of GDP at market prices. The calculations are based on constant local currency.
+- `population`: It records the total population based on all residents regardless of legal status or citizenship.
+- `unem_rate`: It records the unemployment rate, the unemployment refers to the labours that are not working but is available to work or seeking for employment. 
+- `lf_par_rate`: It records the labor force participation rate, it calculated the proportion of the population who ages 15 and older that are active economically. 
+- `trade_per`: It records the sum of exports and imports of goods and services measured as a share of GDP.
+- `gni_per_cap`: It records the GNI per capita, the unit is converted to U.S. dollars using the World Bank Atlas method. GNI is the sum of value added by all resident producers plus any product taxes. It does not include the value of output plus net receipts of primary income from abroad.
 
 ```{r}
 #| label: fig-data
@@ -77,9 +80,7 @@ data_na |>
   labs(x = "GDP growth", y = "Inflation")
 ```
 
-
-
-Talk more about it.
+In @fig-data, I have presented the relationship between GDP growth and Inflation of each countries from my data-set. Which each dot represents one country.
 
 
 
@@ -133,7 +134,7 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
+If two different time events occurs does low-income countries being impacted differently before, after they become high-income countries?
 
 \newpage
 
