@@ -47,15 +47,25 @@ data_na<- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 
 According to The World Bank [@WDIincome], as of July 2019, using the Gross National Income, GNI, per capita by using the World Bank Atlas method. The Atlas method smooths exchange rate fluctuations using a three-year moving average. The low-income economies are defined as \$1,025 or less, lower middle-income economies are those with between \$1,026 and \$3,995. The upper middle-income economies are those between \$3,996 and \$12,375. Lastly, the high-income economies are those with a GNI per capita \$12,376 or more.
 
-For simplicity, I will group the low-income economies and the lower middle-income economies together as low-income economies. Also, the upper middle-income economies and high-income economies will be grouped as high-income economies. Therefore, a country that has a GNI per capita less than or equal to \$3995 will be categorized as low-income country. A country that has a GNI per capita larger than \$3995 will be categorized as high-income country.
+For simplicity, I will group the low-income economies and the lower middle-income economies together as low-income economies. Also, the upper middle-income economies and high-income economies will be grouped as high-income economies. Therefore, a country that has a GNI per capita less than or equal to \$3995 will be categorized as low-income country. A country that has a GNI per capita larger than \$3995 will be categorized as high-income country. Which I have grouped out there are 27 low-income countries in this definition and 85 high-income countries.
 
 \newpage
 
 # Data
 
-The data is obtained from the World Development Indicators and Other World Bank Data, WDI,  @WDI. The raw data set includes, 17024 observations and 11 variables. As the raw data-set recorded some variables have missing values and some repeated values. After combining and deleting the extra and missing values, I have 112 observations and 9 variables. Which each observations represents a country. 
+The data is obtained from the World Development Indicators and Other World Bank Data, WDI,  @WDI. The raw data set includes, 17024 observations and 11 variables. As the raw data-set recorded some variables have missing values and some repeated values. After combining and deleting the extra and missing values, I have 112 observations and 10 variables. Which each observations represents a country. 
 
 ## Variables 
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+#Adding a new variable
+data_na <- data_na %>%
+  mutate(low_income = as.numeric(gni_per_cap <= 3995))
+```
+
 - `country`: It records the country's name.
 - `year`: It records the year of the data being recorded. In our cleaned data set there will only be year 2020.
 - `inflation`: It records the inflation, measured by the consumer price index which reflects the annual percentage change in the cost to the average consumer of acquiring a basket of goods and services that may be fixed or changed at specified intervals, such as yearly.
@@ -65,6 +75,7 @@ The data is obtained from the World Development Indicators and Other World Bank 
 - `lf_par_rate`: It records the labor force participation rate, it calculated the proportion of the population who ages 15 and older that are active economically. 
 - `trade_per`: It records the sum of exports and imports of goods and services measured as a share of GDP.
 - `gni_per_cap`: It records the GNI per capita, the unit is converted to U.S. dollars using the World Bank Atlas method. GNI is the sum of value added by all resident producers plus any product taxes. It does not include the value of output plus net receipts of primary income from abroad.
+- `low_income`: It is a dummy variable indicating that if a country has a GNI per capita less than or equal to \$3995 it will be 1, else, 0.
 
 ```{r}
 #| label: fig-data
@@ -80,10 +91,50 @@ data_na |>
   labs(x = "GDP growth", y = "Inflation")
 ```
 
-In @fig-data, I have presented the relationship between GDP growth and Inflation of each countries from my data-set. Which each dot represents one country.
+In @fig-data, I have presented the relationship between GDP growth and Inflation of each countries from my data-set. Which each dot represents one country. From @fig-data, we could see that countries that have higher/positive gdp growth typically also has a higher inflation rate. 
+
+```{r}
+#| label: fig-inflation
+#| fig-cap: Relationship between differenct level of income countries versus Inflation
+#| echo: false
+#| warning: false
+#| message: false
+
+data_na |>
+  ggplot(mapping = aes(x = low_income, y = inflation)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "Low-income countries", y = "Inflation")+
+  scale_x_continuous(breaks = c(0,1))
+```
+
+```{r}
+#| label: fig-gdp growth
+#| fig-cap: Relationship between differenct level of income countries versus gdp growth
+#| echo: false
+#| warning: false
+#| message: false
+
+data_na |>
+  ggplot(mapping = aes(x = low_income, y = gdp_growth)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "Low-income countries", y = "gdp_growth")+
+  scale_x_continuous(breaks = c(0,1))
+```
+
+```{r}
+data_na |>
+  ggplot(mapping = aes(x = low_income, y = lf_par_rate)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "Low-income countries", y = "Inflation")+
+  scale_x_continuous(breaks = c(0,1))
+```
 
 
 
+\newpage
 
 
 # Model
