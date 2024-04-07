@@ -6,7 +6,7 @@ author:
 thanks: "Code and data are available at: https://github.com/Sluuu/Final-Paper.git"
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This paper examines the impacts of global crises focusing on the 2020 COVID-19 pandemic's effects on low and high-income countries. It highlights how globalization links economies, leading to shared challenges during worldwide disturbances. The analysis reveals that low-income countries have suffered more acutely, experiencing higher unemployment, inflation, and slower GDP growth."
 format: pdf
 number-sections: true
 toc: true
