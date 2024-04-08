@@ -33,3 +33,4 @@ world_bank_data <-WDI(
 
 #### Save Data ####
 write_csv(world_bank_data, "data/raw_data/raw_data.csv")
+

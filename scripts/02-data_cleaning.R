@@ -24,15 +24,18 @@ wb_data <-
     unem_rate = SL.UEM.TOTL.NE.ZS,
     lf_par_rate = SL.TLF.CACT.NE.ZS,
     trade_per = NE.TRD.GNFS.ZS, 
-    gdp_per_cap = NY.GDP.PCAP.CD
+    gni_per_cap = NY.GNP.PCAP.CD
   ) |>
-  select(country, year, inflation, gdp_growth, population, unem_rate, lf_par_rate, trade_per, gdp_per_cap) |>
-  filter(year %in% c(2020, 2008, 2009))
+  select(country, year, inflation, gdp_growth, population, unem_rate, lf_par_rate, trade_per, gni_per_cap) |>
+  filter(year %in% c(2020))
+
+
+
 data_na <- wb_data |> drop_na()
 
 
-
 #### Save data ####
-write_parquet(data_na, "data/analysis_data/data_na.parquet")
+
+#write_parquet(data_na, "data/analysis_data/data_na.parquet")
 write_csv(data_na, "data/analysis_data/analysis_data.csv")
 
