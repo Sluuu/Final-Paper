@@ -161,6 +161,9 @@ From the data presented in @fig-inflation, @fig-gdp-growth, and @fig-lf, I obser
 The model is set up by using 
 
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
 
 lowincome <- data_na %>% filter(low_income == 1)
 highincome <- data_na %>% filter(low_income == 0)
@@ -174,6 +177,9 @@ summary(lowmodel)
 
 
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
 highmodel <- glm(gni_per_cap ~ gdp_growth + population + unem_rate + lf_par_rate + trade_per + inflation, 
              family = gaussian(link = "identity"), data = highincome)
 
