@@ -24,6 +24,7 @@ library(dplyr)
 library(arrow)
 library(dataverse)
 library(WDI)
+library(rstanarm)
 
 ```
 
@@ -93,6 +94,8 @@ data_na |>
 
 In @fig-data, I have presented the relationship between GDP growth and Inflation of each countries from my data-set. Which each dot represents one country. From @fig-data, we could see that countries that have higher/positive gdp growth typically also has a higher inflation rate. 
 
+\newpage
+
 ```{r}
 #| label: fig-inflation
 #| fig-cap: Relationship between differenct level of income countries versus Inflation
@@ -107,9 +110,12 @@ data_na |>
   labs(x = "Low-income countries", y = "Inflation")+
   scale_x_continuous(breaks = c(0,1))
 ```
+In @fig-inflation, I have shown the inflation rate for the low-income and the high-income countries. On the x-axis, when x is equal to 0, it means that the county is a high-income country and it equals to 1 when the country is a low-income country. From @fig-inflation, we could see that high income countries has lower and more stabilized inflation rates. In low-income countries the inflation rate varies across each country. 
+
+\newpage
 
 ```{r}
-#| label: fig-gdp growth
+#| label: fig-gdp-growth
 #| fig-cap: Relationship between differenct level of income countries versus gdp growth
 #| echo: false
 #| warning: false
@@ -122,15 +128,28 @@ data_na |>
   labs(x = "Low-income countries", y = "gdp_growth")+
   scale_x_continuous(breaks = c(0,1))
 ```
+In @fig-gdp-growth, I have shown the gdp growth rate for the low-income and the high-income countries. On the x-axis, when x is equal to 0, it means that the county is a high-income country and it equals to 1 when the country is a low-income country. From @fig-gdp-growth, we could see that high income countries have similar gdp growth rates. In low-income countries the gdp growth rates varies across each country. 
+
+\newpage
 
 ```{r}
+#| label: fig-lf
+#| fig-cap: Relationship between differenct level of income countries versus labour force participation rate
+#| echo: false
+#| warning: false
+#| message: false
 data_na |>
   ggplot(mapping = aes(x = low_income, y = lf_par_rate)) +
   geom_point() +
   theme_minimal() +
-  labs(x = "Low-income countries", y = "Inflation")+
+  labs(x = "Low-income countries", y = "labour force rate")+
   scale_x_continuous(breaks = c(0,1))
 ```
+
+From the data presented in @fig-inflation, @fig-gdp-growth, and @fig-lf, I observed that high-income countries shared similar economic performance trends. Despite not necessarily excelling in all economic indicators than the low-income countries, however, these countries generally maintain a more stable economic condition, with only a few exceptions or outliers noted.
+
+
+ A more detailed relationship between each variable could be found in @fig-relationship.
 
 
 
@@ -140,6 +159,28 @@ data_na |>
 # Model
 
 The model is set up by using 
+
+```{r}
+
+lowincome <- data_na %>% filter(low_income == 1)
+highincome <- data_na %>% filter(low_income == 0)
+lowmodel <- glm(gni_per_cap ~ gdp_growth + population + unem_rate + lf_par_rate + trade_per + inflation, 
+             family = gaussian(link = "identity"), data = lowincome)
+
+summary(lowmodel)
+
+```
+
+
+
+```{r}
+highmodel <- glm(gni_per_cap ~ gdp_growth + population + unem_rate + lf_par_rate + trade_per + inflation, 
+             family = gaussian(link = "identity"), data = highincome)
+
+
+summary(highmodel)
+```
+
 
 Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
 
@@ -191,10 +232,18 @@ If two different time events occurs does low-income countries being impacted dif
 
 \appendix
 
-# Appendix {-}
 
 
 # Additional data details
+```{r}
+#| label: fig-relationship 
+#| fig-cap: Scatterplot matrix of each variables
+#| echo: false
+#| warning: false
+#| message: false
+
+pairs(~inflation + gdp_growth + population + unem_rate + lf_par_rate + trade_per + gni_per_cap, data = data_na)
+```
 
 # Model details {#sec-model-details}
 
