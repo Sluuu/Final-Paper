@@ -1,12 +1,12 @@
 ---
 title: "How crisis affect the low-income and high-income economies differently"
-subtitle: "An example from the 2020 Covid-19"
+subtitle: "An example from the 2020/2021 Covid-19"
 author: 
   - Sean Liu 
 thanks: "Code and data are available at: https://github.com/Sluuu/Final-Paper.git"
 date: today
 date-format: long
-abstract: "This paper examines the impacts of global crises focusing on the 2020 COVID-19 pandemic's effects on low and high-income countries. It highlights how globalization links economies, leading to shared challenges during worldwide disturbances. The analysis reveals that low-income countries have suffered more acutely, experiencing higher unemployment, inflation, and slower GDP growth."
+abstract: "This paper examines the impacts of global crises focusing on the 2020 and 2021 COVID-19 pandemic's effects on low and high-income countries. It highlights how globalization links economies, leading to shared challenges during worldwide disturbances. The analysis reveals that low-income countries have suffered more acutely, experiencing higher unemployment, inflation, and slower GDP growth."
 format: pdf
 number-sections: true
 toc: true
@@ -33,7 +33,7 @@ library(rstanarm)
 
 Globalization improves the connection of different countries of the world. Economically,  globalization benefits different countries in multiple ways and being able to trade goods across borders.[@globalization] However, the effects of globalization brings the whole economy on the same boat. Consequently, when various global crises occur, they have multiple and different impacts on the world economy.
 
-In this paper, my focus is on the varying impacts of global crises on low and high income countries. I have selected the 2020 COVID-19 pandemic as the primary subject of my study. This crises have led to varying degrees of economic uncertainty and fluctuations in economic performance worldwide.[@compare] The World Bank indicates that the COVID-19 pandemic has widen the inequality between low and high-income countries, with low-income countries experiencing higher unemployment and inflation rates, along with slower GDP growth. These trends align with the expectations set in my study.[@inequality]
+In this paper, my focus is on the varying impacts of global crises on low and high income countries. I have selected the 2020 and 2021 COVID-19 pandemic as the primary subject of my study. This crises have led to varying degrees of economic uncertainty and fluctuations in economic performance worldwide.[@compare] The World Bank indicates that the COVID-19 pandemic has widen the inequality between low and high-income countries, with low-income countries experiencing higher unemployment and inflation rates, along with slower GDP growth. These trends align with the expectations set in my study.[@inequality]
 ```{r}
 #| echo: false
 #| warning: false
@@ -54,7 +54,7 @@ For simplicity, I will group the low-income economies and the lower middle-incom
 
 # Data
 
-The data is obtained from the World Development Indicators and Other World Bank Data, WDI,  @WDI. The raw data set includes, 17024 observations and 11 variables. As the raw data-set recorded some variables have missing values and some repeated values. After combining and deleting the extra and missing values, I have 112 observations and 10 variables. Which each observations represents a country. 
+The data is obtained from the World Development Indicators and Other World Bank Data, WDI,  @WDI. The raw data set includes, 17024 observations and 11 variables. As the raw data-set recorded some variables have missing values and some repeated values. After combining and deleting the extra and missing values, In the year of 2020, I have 112 observations and in the year of 2021 I have 117 variables which both years with the sharing 10 variables. Which each observations represents a country. 
 
 ## Variables 
 ```{r}
@@ -86,10 +86,10 @@ data_na <- data_na %>%
 #| message: false
 
 data_na |>
-  ggplot(mapping = aes(x = gdp_growth, y = inflation)) +
+  ggplot(mapping = aes(x = gdp_growth, y = inflation, color = as.factor(year))) +
   geom_point() +
   theme_minimal() +
-  labs(x = "GDP growth", y = "Inflation")
+  labs(x = "GDP Growth", y = "Inflation", color = "Years")
 ```
 
 In @fig-data, I have presented the relationship between GDP growth and Inflation of each countries from my data-set. Which each dot represents one country. From @fig-data, we could see that countries that have higher/positive gdp growth typically also has a higher inflation rate. 
@@ -104,13 +104,13 @@ In @fig-data, I have presented the relationship between GDP growth and Inflation
 #| message: false
 
 data_na |>
-  ggplot(mapping = aes(x = low_income, y = inflation)) +
+  ggplot(mapping = aes(x = low_income, y = inflation, color = as.factor(year))) +
   geom_point() +
   theme_minimal() +
-  labs(x = "Low-income countries", y = "Inflation")+
+  labs(x = "Low-income countries", y = "Inflation", color = "Years")+
   scale_x_continuous(breaks = c(0,1))
 ```
-In @fig-inflation, I have shown the inflation rate for the low-income and the high-income countries. On the x-axis, when x is equal to 0, it means that the county is a high-income country and it equals to 1 when the country is a low-income country. From @fig-inflation, we could see that high income countries has lower and more stabilized inflation rates. In low-income countries the inflation rate varies across each country. 
+In @fig-inflation, I have shown the inflation rate for the low-income and the high-income countries in 2020 and 2021. On the x-axis, when x is equal to 0, it means that the county is a high-income country and it equals to 1 when the country is a low-income country. From @fig-inflation, we could also see that high income countries has lower and more stabilized inflation rates in either year 2020 and year 2021. Which in low-income countries the inflation rate varies across each country and there are also more outliers in year 2021 compare with 2020. 
 
 \newpage
 
@@ -122,13 +122,13 @@ In @fig-inflation, I have shown the inflation rate for the low-income and the hi
 #| message: false
 
 data_na |>
-  ggplot(mapping = aes(x = low_income, y = gdp_growth)) +
+  ggplot(mapping = aes(x = low_income, y = gdp_growth, color = as.factor(year))) +
   geom_point() +
   theme_minimal() +
-  labs(x = "Low-income countries", y = "gdp_growth")+
+  labs(x = "Low-income countries", y = "gdp_growth", color = "Years")+
   scale_x_continuous(breaks = c(0,1))
 ```
-In @fig-gdp-growth, I have shown the gdp growth rate for the low-income and the high-income countries. On the x-axis, when x is equal to 0, it means that the county is a high-income country and it equals to 1 when the country is a low-income country. From @fig-gdp-growth, we could see that high income countries have similar gdp growth rates. In low-income countries the gdp growth rates varies across each country. 
+In @fig-gdp-growth, I have shown the gdp growth rate for the low-income and the high-income countries. On the x-axis, when x is equal to 0, it means that the county is a high-income country and it equals to 1 when the country is a low-income country. From @fig-gdp-growth, we could see that in both 2020 and 2021, each year the high income countries have similar gdp growth rates. Which in low-income countries the gdp growth rates more varies across each country. Lastly in both low and high income situations, the overall gdp growth in 2021 are higher than in 2020.
 
 \newpage
 
@@ -139,10 +139,10 @@ In @fig-gdp-growth, I have shown the gdp growth rate for the low-income and the 
 #| warning: false
 #| message: false
 data_na |>
-  ggplot(mapping = aes(x = low_income, y = lf_par_rate)) +
+  ggplot(mapping = aes(x = low_income, y = lf_par_rate, color = as.factor(year))) +
   geom_point() +
   theme_minimal() +
-  labs(x = "Low-income countries", y = "labour force rate")+
+  labs(x = "Low-income countries", y = "labour force rate", color = "Years")+
   scale_x_continuous(breaks = c(0,1))
 ```
 

@@ -27,7 +27,7 @@ wb_data <-
     gni_per_cap = NY.GNP.PCAP.CD
   ) |>
   select(country, year, inflation, gdp_growth, population, unem_rate, lf_par_rate, trade_per, gni_per_cap) |>
-  filter(year %in% c(2020))
+  filter(year %in% c(2020, 2021))
 
 
 
