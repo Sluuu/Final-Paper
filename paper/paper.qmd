@@ -25,7 +25,8 @@ library(arrow)
 library(dataverse)
 library(WDI)
 library(rstanarm)
-
+library(broom)
+library(stargazer)
 ```
 
 
@@ -133,7 +134,7 @@ In @fig-gdp-growth, I have shown the gdp growth rate for the low-income and the 
 \newpage
 
 ```{r}
-#| label: fig-lf
+#| label: fig-ur
 #| fig-cap: Relationship between differenct level of income countries versus labour force participation rate
 #| echo: false
 #| warning: false
@@ -142,15 +143,16 @@ data_na |>
   ggplot(mapping = aes(x = low_income, y = unem_rate, color = as.factor(year))) +
   geom_point() +
   theme_minimal() +
-  labs(x = "Low-income countries", y = "labour force rate", color = "Years")+
+  labs(x = "Low-income countries", y = "Unemployment Rate", color = "Years")+
   scale_x_continuous(breaks = c(0,1))
 ```
 
-From the data presented in @fig-inflation, @fig-gdp-growth, and @fig-lf, I observed that high-income countries shared similar economic performance trends. Despite not necessarily excelling in all economic indicators than the low-income countries, however, these countries generally maintain a more stable economic condition, with only a few exceptions or outliers noted.
+From @fig-ur, the low-income countries seems to have lower unemployment rate than in high-income countries. Also, in both 2020 and 2021, the unemployment rates for both low and high income countries have similar results.  
+
+Lastly, the data presented in @fig-inflation, @fig-gdp-growth, and @fig-lf, I observed that high-income countries shared similar economic performance trends. Despite not necessarily excelling in all economic indicators than the low-income countries, however, these countries generally maintain a more stable economic condition, with only a few exceptions or outliers noted. Also the overall economic performance in 2021 are better than in 2020. 
 
 
- A more detailed relationship between each variable could be found in @fig-relationship.
-
+A more detailed relationship between each variable could be found in @fig-relationship.
 
 
 \newpage
@@ -158,7 +160,10 @@ From the data presented in @fig-inflation, @fig-gdp-growth, and @fig-lf, I obser
 
 # Model
 
-The model is set up by using R [@citeR] with the help of the following packages, `tidyverse` package of @tidyverse, `readr` package of @readr, `dplyr` package of @dplyr, `dataverse` package of @dataverse
+The model is set up by using R [@citeR] with the help of the following packages, `tidyverse` package of @tidyverse, `readr` package of @readr, `dplyr` package of @dplyr, `dataverse` package of @dataverse, `stargazer` and package of  @stargazer, and `broom` package of @broom.
+Given that countries are classified as low or high income based on their GNI per capita, `gni_per_cap`, I will use this as the dependent variable in a multiple linear regression model to analyze the impact of various factors on `gni_per_cap` across these groups. I will explore how different variables affect `gni_per_cap` in both low and high-income countries. Specifically, I anticipate that low-income countries will experience larger negative effect from unemployment and inflation rates, as well as experience negative GDP growth. This analysis aims to provide insights into the economic challenges faced by these countries and inform potential policy interventions.
+
+\newpage
 
 ```{r}
 #| echo: false
@@ -170,9 +175,30 @@ highincome <- data_na %>% filter(low_income == 0)
 lowmodel <- glm(gni_per_cap ~ gdp_growth + population + unem_rate + lf_par_rate + trade_per + inflation, 
              family = gaussian(link = "identity"), data = lowincome)
 
-summary(lowmodel)
+stargazer(lowmodel, type = "text",
+          title = "Summary of Low Income Model",
+          align = TRUE,
+          out = "model_summary.txt")
 
 ```
+From the Summary of Low Income Model above, we could see the following situations: 
+
+The GDP growth (`gdp_growth`) coefficient is -25.093 with a standard error of 21.917. This suggests there is a negative relationship between GDP growth and GNI per capita, though it is not statistically significant as its high p-value. Then the Unemployment rate (`unem_rate`) coefficient is -23.374 with a standard error of 34.236. This indicates a negative relationship between the unemployment rate and GNI per capita, which is also not statistically significant. Lastly the Inflation (`inflation`) coefficient is -7.082 with a standard error of 8.800, indicating a negative relationship between inflation and GNI per capita, though this relationship is not statistically significant.
+
+The Labor force participation rate (`lf_par_rate`) coefficient is -52.818 with a standard error of 13.104, and it is significant at the p<0.01 level. This significant negative relationship implies that higher labor force participation is associated with lower GNI per capita among the low-income countries in this analysis, which might suggest underemployment or low-quality jobs prevalent in these economies.
+The Trade percentage of GDP (`trade_per`) coefficient is 11.697 with a standard error of 3.992, significant at the p<0.01 level. This significant positive relationship suggests that a higher trade percentage of GDP is associated with higher GNI per capita, indicating the beneficial impact of trade on national income in low-income countries.
+
+The Population (`population`) coefficient is different than the other variables. As its coefficient is extremely small and not statistically significant, suggesting that population size, has no impact on GNI per capita in this model.
+
+Constant: The intercept is 5,120.936 with a standard error of 926.753, significant at the p<0.01 level. This value represents the estimated GNI per capita when all other predictors are zero, which is a theoretical baseline for the model.
+
+Model Fit and Quality
+Observations: There are 53 observations in this model, providing a somewhat small but possibly adequate sample size for initial explorations in economic data.
+
+Log Likelihood: The log likelihood value is -432.942. While in isolation this number doesn't tell much, it helps in model comparisons, particularly when comparing nested models.
+
+Akaike Information Criterion (AIC): The AIC is 879.883. A lower AIC indicates a better model fit relative to models with higher AIC values, assuming the same data. It is used for model selection.
+
 
 
 
@@ -184,11 +210,18 @@ highmodel <- glm(gni_per_cap ~ gdp_growth + population + unem_rate + lf_par_rate
              family = gaussian(link = "identity"), data = highincome)
 
 
-summary(highmodel)
+stargazer(highmodel, type = "text",
+          title = "Summary of High Income Model",
+          align = TRUE,
+          out = "model_summary.txt")
 ```
+The high income-countries have an overall better performance than the low-income countries: 
+The GDP Growth (`gdp_growth`) coefficient is 567.121 with a standard error of 244.367, significant at the p<0.05 level. This suggests a positive and statistically significant relationship between GDP growth and GNI per capita in high-income countries, indicating that economic growth positively impacts income levels. Then the Unemployment Rate (`unem_rate`) coefficient is -849.519 with a standard error of 350.854, significant at the p<0.05 level. This indicates a significant negative impact of higher unemployment rates on GNI per capita, suggesting that unemployment is a critical economic issue affecting income in high-income countries. The Labor Force Participation Rate (`lf_par_rate`) coefficient is 433.735 with a standard error of 229.487, significant at the p<0.1 level. This shows a positive relationship between labor force participation and GNI per capita, though the relationship is less statistically significant. The Trade Percentage of GDP (`trade_per`) coefficient is 59.875 with a standard error of 22.554, significant at the p<0.01 level. This indicates a robust positive relationship, suggesting that trade openness contributes significantly to GNI per capita in high-income countries. Lastly, the Inflation (`inflation`) coefficient is -2,799.239 with a standard error of 600.123, significant at the p<0.01 level. This suggests a strong negative impact of inflation on GNI per capita, indicating that higher inflation rates are detrimental to income levels.
 
+Same with the low-income situation, the Population (`population`) coefficient is extremely small and statistically insignificant, implying no clear impact of population size on GNI per capita within this model.
 
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
+Constant: The intercept is 7,822.731 with a substantial standard error of 16,169.640. While not statistically significant, this value indicates the baseline GNI per capita when all predictors are zero, though this scenario is mostly theoretical given the nature of the predictors.
+
 
 ## Model set-up
 
@@ -203,7 +236,6 @@ y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
 \sigma &\sim \mbox{Exponential}(1)
 \end{align}
 
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
 
 
 ### Model justification
