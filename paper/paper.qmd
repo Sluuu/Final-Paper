@@ -220,7 +220,7 @@ The GDP Growth (`gdp_growth`) coefficient is 567.121 with a standard error of 24
 
 Same with the low-income situation, the Population (`population`) coefficient is extremely small and statistically insignificant, implying no clear impact of population size on GNI per capita within this model.
 
-Constant: The intercept is 7,822.731 with a substantial standard error of 16,169.640. While not statistically significant, this value indicates the baseline GNI per capita when all predictors are zero, though this scenario is mostly theoretical given the nature of the predictors.
+
 
 
 ## Model set-up
