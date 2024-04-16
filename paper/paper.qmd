@@ -190,16 +190,6 @@ The Trade percentage of GDP (`trade_per`) coefficient is 11.697 with a standard 
 
 The Population (`population`) coefficient is different than the other variables. As its coefficient is extremely small and not statistically significant, suggesting that population size, has no impact on GNI per capita in this model.
 
-Constant: The intercept is 5,120.936 with a standard error of 926.753, significant at the p<0.01 level. This value represents the estimated GNI per capita when all other predictors are zero, which is a theoretical baseline for the model.
-
-Model Fit and Quality
-Observations: There are 53 observations in this model, providing a somewhat small but possibly adequate sample size for initial explorations in economic data.
-
-Log Likelihood: The log likelihood value is -432.942. While in isolation this number doesn't tell much, it helps in model comparisons, particularly when comparing nested models.
-
-Akaike Information Criterion (AIC): The AIC is 879.883. A lower AIC indicates a better model fit relative to models with higher AIC values, assuming the same data. It is used for model selection.
-
-
 
 
 ```{r}
@@ -221,33 +211,86 @@ The GDP Growth (`gdp_growth`) coefficient is 567.121 with a standard error of 24
 Same with the low-income situation, the Population (`population`) coefficient is extremely small and statistically insignificant, implying no clear impact of population size on GNI per capita within this model.
 
 
-
-
 ## Model set-up
 
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
+To consider the effect of the 6 economic indicators on the level on low and high income countries' GNI per capita, I used the multiple linear regression to approach my data. The formula is as follows: 
 
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
+\begin{align}
+\text{gni\_per\_cap} &= \alpha + \beta_1 \times \text{population}_i + \beta_2 \times \text{unem\_rate}_i + \beta_3 \times \text{lf\_par\_rate}_i \\
+&\quad + \beta_4 \times \text{trade\_per}_i + \beta_5 \times \text{inflation}_i, \\
+\alpha &\sim \text{Normal}(0, 2.5), \\
+\beta_1 &\sim \text{Normal}(0, 2.5), \\
+\beta_2 &\sim \text{Normal}(0, 2.5), \\
+\beta_3 &\sim \text{Normal}(0, 2.5), \\
+\beta_4 &\sim \text{Normal}(0, 2.5), \\
+\beta_5 &\sim \text{Normal}(0, 2.5)
 \end{align}
 
 
 
-### Model justification
+### Model Adjustment
 
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
+For a better performance and interpretation of the model, I have applied the log transformation to my model. The log transformation is to reduce the skewness in variables that have a skewed distribution, such as `gni_per_cpa`, `gdp_growth`, `population`, etc. By transforming these variables, the distribution is more symmetric, which is closer to the normal distribution. The Log transformations also help stabilize the variance across different levels of input variables, reduces homoscedasticity.
+The log transformation variables are the follows:
+Log of `gni_per_cap` The dependent variable's log transformation can help in normalizing the distribution and making relationships more linear.
+The log of `gdp_growth` and `population` shared similar reasons. As Economic growth rates and population can vary widely, and the impact on GNI per capita might scale logarithmically rather than linearly.
 
-We can use maths by including latex between dollar signs, for instance $\theta$.
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+log_lowmodel <- glm(log(gni_per_cap) ~ log(gdp_growth + 1) + log(population + 1) + unem_rate + lf_par_rate + trade_per + inflation, family = gaussian(link = "identity"), data = lowincome)
+
+stargazer(log_lowmodel, type = "text",
+          title = "Summary of Low Income Model",
+          align = TRUE,
+          out = "model_summary.txt")
+```
+
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+log_highmodel <- glm(log(gni_per_cap) ~ log(gdp_growth + 1) + log(population + 1) + unem_rate + lf_par_rate + trade_per + inflation,family = gaussian(link = "identity"), data = highincome)
+
+stargazer(log_highmodel, type = "text",
+          title = "Summary of High Income Model",
+          align = TRUE,
+          out = "model_summary.txt")
+```
+
+
 
 
 # Results
 
-
+Labor Force Participation (lf_par_rate):
+Low-Income: Significant negative relationship.
+High-Income: Significant positive relationship.
+Insight: This contrast may indicate that in low-income countries, increases in labor force participation may include low-quality, low-income jobs, whereas in high-income countries, higher participation could be linked to high-skill, high-income roles.
+Trade as Percentage of GDP (trade_per):
+Both: Positive impact and significant in both models.
+Insight: Trade openness appears beneficial across both income groups, enhancing GNI per capita.
+Other Significant Predictors
+GDP Growth (gdp_growth):
+Low-Income: Insignificant.
+High-Income: Significant and positive.
+Insight: Economic growth plays a more critical role in high-income countries, possibly reflecting more developed financial systems and infrastructure which better translate growth into GNI per capita.
+Unemployment Rate (unem_rate):
+Low-Income: Insignificant.
+High-Income: Significant and negative.
+Insight: Unemployment negatively impacts GNI per capita in high-income countries, where unemployment may lead to significant economic losses.
+Inflation (inflation):
+Low-Income: Insignificant.
+High-Income: Significant and negative.
+Insight: Inflation is a critical factor in high-income countries, perhaps due to more developed financial markets and economies where inflation can erode real income levels more noticeably.
+Model Performance Metrics
+Log Likelihood and AIC:
+The log likelihood is notably lower (more negative) in the high-income model, reflecting the larger scale and complexity of the dataset. The AIC is also significantly higher, suggesting a less efficient model relative to the number of parameters and the sample size compared to the low-income model.
+Overall Conclusion
+The comparison reveals distinct economic dynamics between low- and high-income countries. Factors like labor force participation and trade are important in both, but their impacts differ by income level. Economic growth, unemployment, and inflation are more influential in high-income contexts, suggesting different policy priorities for each group. This analysis underscores the importance of tailored economic policies that consider specific national circumstances and economic structures.
 
 
 
