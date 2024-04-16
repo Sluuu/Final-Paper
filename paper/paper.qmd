@@ -280,13 +280,6 @@ The negative coefficient for GDP growth in low-income countries was expected how
 There are several weaknesses of this study, which in the low-income countries model several important variables like GDP growth, unemployment, and inflation did not show statistically significant effects. This might be due to the lack of sample sizes and the high fluctuations in the data. The second weakness was the lack of variables, the model did not include some relevant variables that affect GNI per capita, such as political stability, technology, and education levels, etc. Which both results might create biases onto the results.
 The next step of the study might be on increase the data size, such as include more years or some micro-level data. 
 
-
-\newpage
-
-\appendix
-
-
-
 # Additional data details
 ```{r}
 #| label: fig-relationship 
