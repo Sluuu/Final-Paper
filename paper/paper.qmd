@@ -217,13 +217,7 @@ To consider the effect of the 6 economic indicators on the level on low and high
 
 \begin{align}
 \text{gni\_per\_cap} &= \alpha + \beta_1 \times \text{gdp\_growth}_i + \beta_2 \times \text{population}_i + \beta_3 \times \text{unem\_rate}_i + \beta_4 \times \text{lf\_par\_rate}_i \\
-&\quad + \beta_5 \times \text{trade\_per}_i + \beta_6 \times \text{inflation}_i, \\
-\alpha &\sim \text{Normal}(0, 2.5), \\
-\beta_1 &\sim \text{Normal}(0, 2.5), \\
-\beta_2 &\sim \text{Normal}(0, 2.5), \\
-\beta_3 &\sim \text{Normal}(0, 2.5), \\
-\beta_4 &\sim \text{Normal}(0, 2.5), \\
-\beta_5 &\sim \text{Normal}(0, 2.5)
+&\quad + \beta_5 \times \text{trade\_per}_i + \beta_6 \times \text{inflation}_i
 \end{align}
 
 ## Model Adjustment
@@ -236,13 +230,7 @@ The following formula is the updated log transformation on certain variables.
 \begin{align}
 \log(\text{gni\_per\_cap}) &= \alpha + \beta_1 \times \log(\text{gdp\_growth}_i+1) + \beta_2 \times \log(\text{population}_i +1) \\ 
 &\quad + \beta_3 \times \text{unem\_rate}_i + \beta_4 \times \text{lf\_par\_rate}_i \\
-&\quad + \beta_5 \times \text{trade\_per}_i + \beta_6 \times \text{inflation}_i, \\
-\alpha &\sim \text{Normal}(0, 2.5), \\
-\beta_1 &\sim \text{Normal}(0, 2.5), \\
-\beta_2 &\sim \text{Normal}(0, 2.5), \\
-\beta_3 &\sim \text{Normal}(0, 2.5), \\
-\beta_4 &\sim \text{Normal}(0, 2.5), \\
-\beta_5 &\sim \text{Normal}(0, 2.5)
+&\quad + \beta_5 \times \text{trade\_per}_i + \beta_6 \times \text{inflation}_i
 \end{align}
 
 ```{r}
