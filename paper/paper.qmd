@@ -3,7 +3,7 @@ title: "How crisis affect the low-income and high-income economies differently"
 subtitle: "An example from the 2020/2021 Covid-19"
 author: 
   - Sean Liu 
-thanks: "Code and data are available at: https://github.com/Sluuu/Final-Paper.git"
+thanks: "Code and data are available at: https://github.com/Sluuu/crisis-affect-countries.git"
 date: today
 date-format: long
 abstract: "This paper examines the impacts of global crises focusing on the 2020 and 2021 COVID-19 pandemic's effects on low and high-income countries. It highlights how globalization links economies, leading to shared challenges during worldwide disturbances. The analysis reveals that low-income countries have suffered more acutely, experiencing higher unemployment, inflation, and slower GDP growth."
@@ -226,13 +226,12 @@ To consider the effect of the 6 economic indicators on the level on low and high
 \beta_5 &\sim \text{Normal}(0, 2.5)
 \end{align}
 
-
-### Model Adjustment
-
+## Model Adjustment
 For a better performance and interpretation of the model, I have applied the log transformation to my model. The log transformation is to reduce the skewness in variables that have a skewed distribution, such as `gni_per_cpa`, `gdp_growth`, `population`, etc. By transforming these variables, the distribution is more symmetric, which is closer to the normal distribution. The Log transformations also help stabilize the variance across different levels of input variables, reduces homoscedasticity.
 The log transformation variables are the follows:
 Log of `gni_per_cap` The dependent variable's log transformation can help in normalizing the distribution and making relationships more linear.
 The log of `gdp_growth` and `population` shared similar reasons. As Economic growth rates and population can vary widely, and the impact on GNI per capita might scale logarithmically rather than linearly.
+The following formula is the updated log transformation on certain variables. 
 
 \begin{align}
 \log(\text{gni\_per\_cap}) &= \alpha + \beta_1 \times \log(\text{gdp\_growth}_i+1) + \beta_2 \times \log(\text{population}_i +1) \\ 
@@ -258,8 +257,7 @@ stargazer(log_lowmodel, type = "text",
           out = "model_summary.txt")
 ```
 
-
-
+\newpage
 ```{r}
 #| echo: false
 #| warning: false
@@ -273,8 +271,6 @@ stargazer(log_highmodel, type = "text",
 ```
 
 
-
-
 # Results
 
 From the model we could see that in low-income countries the labour force participation rate has a significant negative value. Which in the high-income countries, the labour force participation rate has a significant positive value. This contrast may indicate that in low-income countries, increases in labor force participation may include low-quality, low-income jobs. Which are more unsecured during the COVID-19 crisis. Whereas in high-income countries, higher participation could be linked to more high-skill roles. [@job]
@@ -285,20 +281,17 @@ The GDP Growth played an important role in the high-income countries and it has 
 The unemployment rate and the inflation rate both have a significant and negative impact in the high-income countries. 
 As the unemployment rate negatively impacts GNI per capita in high-income countries, where unemployment may lead to significant economic losses. The inflation is an important factor in high-income countries, however, due to more developed financial markets and economies, there are more ways to reduce the impact of inflation. Which in the low-income economies, the unemployment rate and the inflation rate have insignificant negative impact on GNI per capita. 
 
-
 # Discussion
 
-## First discussion point {#sec-first-point}
+The results showed that the unemployment and inflation have significant negative impacts in high-income countries, as indicated by the strong and significant coefficients. These outcomes were unexpected, as the expectation was that these factors would have a larger negative effect in low-income countries than the high-income countries. It may be that high-income countries have a more developed financial markets and dependencies on stable economic indicators which are more sensitive to the fluctuations.
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
-
-## Second discussion point
-
-## Third discussion point
+The negative coefficient for GDP growth in low-income countries was expected however, it was not significant. For high-income countries, GDP growth shows a positive and significant impact, indicating robust economic dynamics where growth directly enhances national income levels. Also the high income countries showed a significant stronger positive relationship on labour force participation rate and trade as a share of GDP. 
 
 ## Weaknesses and next steps
 
-If two different time events occurs does low-income countries being impacted differently before, after they become high-income countries?
+There are several weaknesses of this study, which in the low-income countries model several important variables like GDP growth, unemployment, and inflation did not show statistically significant effects. This might be due to the lack of sample sizes and the high fluctuations in the data. The second weakness was the lack of variables, the model did not include some relevant variables that affect GNI per capita, such as political stability, technology, and education levels, etc. Which both results might create biases onto the results.
+The next step of the study might be on increase the data size, such as include more years or some micro-level data. 
+
 
 \newpage
 
@@ -316,19 +309,6 @@ If two different time events occurs does low-income countries being impacted dif
 
 pairs(~inflation + gdp_growth + population + unem_rate + lf_par_rate + trade_per + gni_per_cap, data = data_na)
 ```
-
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-
-
-
-## Diagnostics
-
-
-
-
 
 \newpage
 
