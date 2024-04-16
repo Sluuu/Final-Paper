@@ -216,8 +216,8 @@ Same with the low-income situation, the Population (`population`) coefficient is
 To consider the effect of the 6 economic indicators on the level on low and high income countries' GNI per capita, I used the multiple linear regression to approach my data. The formula is as follows: 
 
 \begin{align}
-\text{gni\_per\_cap} &= \alpha + \beta_1 \times \text{population}_i + \beta_2 \times \text{unem\_rate}_i + \beta_3 \times \text{lf\_par\_rate}_i \\
-&\quad + \beta_4 \times \text{trade\_per}_i + \beta_5 \times \text{inflation}_i, \\
+\text{gni\_per\_cap} &= \alpha + \beta_1 \times \text{gdp\_growth}_i + \beta_2 \times \text{population}_i + \beta_3 \times \text{unem\_rate}_i + \beta_4 \times \text{lf\_par\_rate}_i \\
+&\quad + \beta_5 \times \text{trade\_per}_i + \beta_6 \times \text{inflation}_i, \\
 \alpha &\sim \text{Normal}(0, 2.5), \\
 \beta_1 &\sim \text{Normal}(0, 2.5), \\
 \beta_2 &\sim \text{Normal}(0, 2.5), \\
@@ -227,13 +227,24 @@ To consider the effect of the 6 economic indicators on the level on low and high
 \end{align}
 
 
-
 ### Model Adjustment
 
 For a better performance and interpretation of the model, I have applied the log transformation to my model. The log transformation is to reduce the skewness in variables that have a skewed distribution, such as `gni_per_cpa`, `gdp_growth`, `population`, etc. By transforming these variables, the distribution is more symmetric, which is closer to the normal distribution. The Log transformations also help stabilize the variance across different levels of input variables, reduces homoscedasticity.
 The log transformation variables are the follows:
 Log of `gni_per_cap` The dependent variable's log transformation can help in normalizing the distribution and making relationships more linear.
 The log of `gdp_growth` and `population` shared similar reasons. As Economic growth rates and population can vary widely, and the impact on GNI per capita might scale logarithmically rather than linearly.
+
+\begin{align}
+\log(\text{gni\_per\_cap}) &= \alpha + \beta_1 \times \log(\text{gdp\_growth}_i+1) + \beta_2 \times \log(\text{population}_i +1) \\ 
+&\quad + \beta_3 \times \text{unem\_rate}_i + \beta_4 \times \text{lf\_par\_rate}_i \\
+&\quad + \beta_5 \times \text{trade\_per}_i + \beta_6 \times \text{inflation}_i, \\
+\alpha &\sim \text{Normal}(0, 2.5), \\
+\beta_1 &\sim \text{Normal}(0, 2.5), \\
+\beta_2 &\sim \text{Normal}(0, 2.5), \\
+\beta_3 &\sim \text{Normal}(0, 2.5), \\
+\beta_4 &\sim \text{Normal}(0, 2.5), \\
+\beta_5 &\sim \text{Normal}(0, 2.5)
+\end{align}
 
 ```{r}
 #| echo: false
@@ -266,33 +277,13 @@ stargazer(log_highmodel, type = "text",
 
 # Results
 
-Labor Force Participation (lf_par_rate):
-Low-Income: Significant negative relationship.
-High-Income: Significant positive relationship.
-Insight: This contrast may indicate that in low-income countries, increases in labor force participation may include low-quality, low-income jobs, whereas in high-income countries, higher participation could be linked to high-skill, high-income roles.
-Trade as Percentage of GDP (trade_per):
-Both: Positive impact and significant in both models.
-Insight: Trade openness appears beneficial across both income groups, enhancing GNI per capita.
-Other Significant Predictors
-GDP Growth (gdp_growth):
-Low-Income: Insignificant.
-High-Income: Significant and positive.
-Insight: Economic growth plays a more critical role in high-income countries, possibly reflecting more developed financial systems and infrastructure which better translate growth into GNI per capita.
-Unemployment Rate (unem_rate):
-Low-Income: Insignificant.
-High-Income: Significant and negative.
-Insight: Unemployment negatively impacts GNI per capita in high-income countries, where unemployment may lead to significant economic losses.
-Inflation (inflation):
-Low-Income: Insignificant.
-High-Income: Significant and negative.
-Insight: Inflation is a critical factor in high-income countries, perhaps due to more developed financial markets and economies where inflation can erode real income levels more noticeably.
-Model Performance Metrics
-Log Likelihood and AIC:
-The log likelihood is notably lower (more negative) in the high-income model, reflecting the larger scale and complexity of the dataset. The AIC is also significantly higher, suggesting a less efficient model relative to the number of parameters and the sample size compared to the low-income model.
-Overall Conclusion
-The comparison reveals distinct economic dynamics between low- and high-income countries. Factors like labor force participation and trade are important in both, but their impacts differ by income level. Economic growth, unemployment, and inflation are more influential in high-income contexts, suggesting different policy priorities for each group. This analysis underscores the importance of tailored economic policies that consider specific national circumstances and economic structures.
+From the model we could see that in low-income countries the labour force participation rate has a significant negative value. Which in the high-income countries, the labour force participation rate has a significant positive value. This contrast may indicate that in low-income countries, increases in labor force participation may include low-quality, low-income jobs. Which are more unsecured during the COVID-19 crisis. Whereas in high-income countries, higher participation could be linked to more high-skill roles. [@job]
+The Trade as Percentage of GDP has positive impact and significant in both low and high income countries. Although the trade decreases sharply in 2020, however, the recovery in 2021 was more significant than the dropped in 2020. Causing the  total trade flows are above the pre-pandemic levels.[@Trade]
 
+The GDP Growth played an important role in the high-income countries and it has a significant and positive relationship. Possibly reflecting more developed financial systems and infrastructure which cause more growth into GNI per capita. However, it has insignificant negative relationship in the low-income coutries. 
 
+The unemployment rate and the inflation rate both have a significant and negative impact in the high-income countries. 
+As the unemployment rate negatively impacts GNI per capita in high-income countries, where unemployment may lead to significant economic losses. The inflation is an important factor in high-income countries, however, due to more developed financial markets and economies, there are more ways to reduce the impact of inflation. Which in the low-income economies, the unemployment rate and the inflation rate have insignificant negative impact on GNI per capita. 
 
 
 # Discussion
