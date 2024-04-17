@@ -19,8 +19,15 @@ library(stargazer)
 
 #### Read data ####
 analysis_data <- read_csv("data/analysis_data/analysis_data.csv")
+data_na<- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+
 
 ### Model data ####
+
+data_na <- data_na %>%
+  mutate(low_income = as.numeric(gni_per_cap <= 3995))
+
+
 lowincome <- data_na %>% filter(low_income == 1)
 highincome <- data_na %>% filter(low_income == 0)
 lowmodel <- glm(gni_per_cap ~ gdp_growth + population + unem_rate + lf_par_rate + trade_per + inflation, 
