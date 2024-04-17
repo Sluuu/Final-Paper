@@ -18,7 +18,6 @@ library(broom)
 library(stargazer)
 
 #### Read data ####
-analysis_data <- read_csv("data/analysis_data/analysis_data.csv")
 data_na<- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 
 
