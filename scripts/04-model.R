@@ -1,37 +1,56 @@
 #### Preamble ####
-# Purpose: Models... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Modes for low and high income countries
+# Author: Sean Liu
+# Date: 16 April 2024
+# Contact: yuhsiang.liu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
 
 
 #### Workspace setup ####
 library(tidyverse)
+library(readr)
+library(dplyr)
+library(arrow)
+library(dataverse)
+library(WDI)
 library(rstanarm)
+library(broom)
+library(stargazer)
 
 #### Read data ####
 analysis_data <- read_csv("data/analysis_data/analysis_data.csv")
 
 ### Model data ####
-first_model <-
-  stan_glm(
-    formula = flying_time ~ length + width,
-    data = analysis_data,
-    family = gaussian(),
-    prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
-    prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
-    prior_aux = exponential(rate = 1, autoscale = TRUE),
-    seed = 853
-  )
+lowincome <- data_na %>% filter(low_income == 1)
+highincome <- data_na %>% filter(low_income == 0)
+lowmodel <- glm(gni_per_cap ~ gdp_growth + population + unem_rate + lf_par_rate + trade_per + inflation, 
+                family = gaussian(link = "identity"), data = lowincome)
+
+stargazer(lowmodel, type = "text",
+          title = "Summary of Low Income Model",
+          align = TRUE,
+          out = "model_summary.txt")
+
+
+highmodel <- glm(gni_per_cap ~ gdp_growth + population + unem_rate + lf_par_rate + trade_per + inflation, 
+                family = gaussian(link = "identity"), data = highincome)
+
+stargazer(lowmodel, type = "text",
+          title = "Summary of High Income Model",
+          align = TRUE,
+          out = "model_summary.txt")
 
 
 #### Save model ####
 saveRDS(
-  first_model,
-  file = "models/first_model.rds"
+  lowmodel,
+  file = "other/models/lowmodel.rds"
 )
+
+saveRDS(
+  highmodel,
+  file = "other/models/highmodel.rds"
+)
+
 
 
