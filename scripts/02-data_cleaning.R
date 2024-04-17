@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose: Cleans the raw data, filtering by year 2008, 2009, and 2020
+# Purpose: Cleans the raw data, filtering by year 2020 and 2021
 # Author: Sean Liu
 # Date: 2 April 2024
 # Contact: yuhsiang.liu@mail.utoronto.ca
